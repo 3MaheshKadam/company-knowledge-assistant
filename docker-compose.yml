@@ -1,0 +1,63 @@
+# Production-like stack:  docker compose up --build
+# Set RAG_API_KEYS in .env (copy .env.example). The API refuses requests until keys are configured.
+name: company-knowledge-assistant
+
+services:
+  api:
+    build:
+      context: .
+      args:
+        VCS_REF: ${VCS_REF:-local}
+    image: company-knowledge-assistant:${TAG:-local}
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      RAG_API_KEYS: ${RAG_API_KEYS:-}
+      RAG_ALLOW_ANONYMOUS: ${RAG_ALLOW_ANONYMOUS:-false}
+    ports:
+      - "127.0.0.1:${PORT:-8000}:8000"   # bound to localhost; put a TLS reverse proxy in front for real use
+    volumes:
+      - rag-data:/data
+    restart: unless-stopped
+    # ---- container hardening ----
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    # ---- resource limits (predictable behaviour under load) ----
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
+    pids_limit: 256
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  seed:
+    # One-off job: load the bundled sample docs into the running API.  docker compose --profile seed run --rm seed
+    profiles: ["seed"]
+    image: curlimages/curl:8.10.1
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      RAG_API_KEYS: ${RAG_API_KEYS:-}
+    volumes:
+      - ./data/raw:/docs:ro
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        key=$${RAG_API_KEYS%%,*}
+        for f in /docs/*; do
+          curl -fsS -H "X-API-Key: $$key" -F "file=@$$f" http://api:8000/v1/documents && echo
+        done
+
+volumes:
+  rag-data:

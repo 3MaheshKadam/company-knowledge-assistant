@@ -1,0 +1,7 @@
+# Developer overrides:  docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+services:
+  api:
+    environment:
+      RAG_ALLOW_ANONYMOUS: "true"   # DEV ONLY - never enable in production
+      RAG_RATE_LIMIT_PER_MIN: "600"
+    read_only: false
