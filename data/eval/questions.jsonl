@@ -1,0 +1,25 @@
+{"question": "How many days of annual leave do full-time employees get?", "source": "hr_leave_policy.md", "answer_keywords": ["24 days"], "answerable": true}
+{"question": "How many unused vacation days can be carried over to next year?", "source": "hr_leave_policy.md", "answer_keywords": ["10 unused days"], "answerable": true}
+{"question": "When is a medical certificate required for sick leave?", "source": "hr_leave_policy.md", "answer_keywords": ["3 consecutive days"], "answerable": true}
+{"question": "How long is parental leave for primary caregivers?", "source": "hr_leave_policy.md", "answer_keywords": ["16 weeks"], "answerable": true}
+{"question": "How far in advance must annual leave be requested?", "source": "hr_leave_policy.md", "answer_keywords": ["14 days"], "answerable": true}
+{"question": "What are the core working hours?", "source": "employee_handbook.md", "answer_keywords": ["10:00 to 16:00"], "answerable": true}
+{"question": "How many days per week can I work remotely?", "source": "employee_handbook.md", "answer_keywords": ["3 days per week"], "answerable": true}
+{"question": "How long is the probation period?", "source": "employee_handbook.md", "answer_keywords": ["90 day"], "answerable": true}
+{"question": "What is the annual learning budget?", "source": "employee_handbook.md", "answer_keywords": ["1,200 USD"], "answerable": true}
+{"question": "How often are performance reviews held?", "source": "employee_handbook.md", "answer_keywords": ["twice a year"], "answerable": true}
+{"question": "What is the minimum password length?", "source": "it_security_sop.md", "answer_keywords": ["14 characters"], "answerable": true}
+{"question": "How quickly must a lost laptop be reported?", "source": "it_security_sop.md", "answer_keywords": ["1 hour"], "answerable": true}
+{"question": "How soon must the security engineer acknowledge a P1 incident?", "source": "it_security_sop.md", "answer_keywords": ["15 minutes"], "answerable": true}
+{"question": "How often must passwords be rotated?", "source": "it_security_sop.md", "answer_keywords": ["180 days"], "answerable": true}
+{"question": "On which days do production releases happen?", "source": "engineering_deployment_runbook.md", "answer_keywords": ["Tuesday and Thursday"], "answerable": true}
+{"question": "What error rate triggers a rollback?", "source": "engineering_deployment_runbook.md", "answer_keywords": ["2 percent"], "answerable": true}
+{"question": "How many approving reviews does a pull request need?", "source": "engineering_deployment_runbook.md", "answer_keywords": ["2 approving reviews"], "answerable": true}
+{"question": "How long does an on-call rotation last?", "source": "engineering_deployment_runbook.md", "answer_keywords": ["7 days"], "answerable": true}
+{"question": "What is the daily meal allowance on business travel?", "source": "expense_policy.txt", "answer_keywords": ["60 USD"], "answerable": true}
+{"question": "What is the hotel limit per night in high-cost cities?", "source": "expense_policy.txt", "answer_keywords": ["250 USD"], "answerable": true}
+{"question": "Within how many days must expense reports be submitted?", "source": "expense_policy.txt", "answer_keywords": ["30 days"], "answerable": true}
+{"question": "Who approves expenses above 500 USD?", "source": "expense_policy.txt", "answer_keywords": ["finance approval"], "answerable": true}
+{"question": "What is the company's policy on bringing pets to the office?", "source": null, "answer_keywords": [], "answerable": false}
+{"question": "What is the CEO's salary?", "source": null, "answer_keywords": [], "answerable": false}
+{"question": "Does the company offer stock options?", "source": null, "answer_keywords": [], "answerable": false}

@@ -1,0 +1,11 @@
+Northwind Labs - Travel and Expense Policy
+
+Meals: Employees on business travel may claim up to 60 USD per day for meals. Alcohol is not reimbursable.
+
+Flights: Economy class must be used for flights shorter than 6 hours. Business class is allowed for flights of 6 hours or longer with director approval. Book flights at least 14 days in advance when possible.
+
+Hotels: Hotel stays are reimbursed up to 180 USD per night in standard cities and 250 USD per night in high-cost cities such as New York, London and Singapore.
+
+Submitting Expenses: Expense reports must be submitted within 30 days of the expense date, with receipts attached for any amount over 25 USD. Reports older than 30 days are not reimbursed.
+
+Approval: Expenses up to 500 USD are approved by the line manager. Expenses above 500 USD also need finance approval. Reimbursement is paid within 10 business days of approval.

@@ -1,0 +1,17 @@
+{
+  "k": 4,
+  "n_answerable": 22,
+  "n_unanswerable": 3,
+  "retrieval": {
+    "dense": {"recall@k": 0.955, "mrr": 0.886, "latency_ms": 2.9},
+    "bm25": {"recall@k": 0.955, "mrr": 0.955, "latency_ms": 0.0},
+    "hybrid": {"recall@k": 0.955, "mrr": 0.932, "latency_ms": 3.4},
+    "hybrid_rerank": {"recall@k": 0.955, "mrr": 0.955, "latency_ms": 4.1}
+  },
+  "end_to_end": {
+    "answer_accuracy": 0.955,
+    "citation_precision": 0.955,
+    "faithfulness": 1.0,
+    "abstention_rate": 1.0
+  }
+}
