@@ -26,3 +26,14 @@ acknowledgement within a few days.
 - Rate limiting and caching are **per process** (in memory). Behind multiple replicas, use a shared store (Redis).
 - Documents are not scanned for malware, and there is no document-level access control: anyone with a valid key can query everything indexed.
 - TLS is expected to terminate at a reverse proxy / load balancer.
+
+## Accepted risks
+
+| Advisory | Component | Why it is accepted | Revisit |
+|---|---|---|---|
+| PYSEC-2026-311 (CVE-2026-45829), PYSEC-2026-3813 (CVE-2026-45830), PYSEC-2026-3814 (CVE-2026-45833), PYSEC-2026-3815 (CVE-2026-45831) | `chromadb` 1.5.9 | All four concern ChromaDB's **HTTP server** (`/api/v2/...` endpoints and its RBAC authorization provider). This project uses only the **embedded** `PersistentClient` as a library; no Chroma server is started or exposed. No fixed release exists yet. | When `chromadb` publishes a fix, upgrade and remove the `--ignore-vuln` flags in `.github/workflows/security.yml`. **If you ever run Chroma as a server (see ARCHITECTURE.md scaling notes), these advisories apply: do not do so until they are fixed.** |
+
+## Supply-chain hygiene for CI
+
+Third-party security tooling is itself an attack surface. `aquasecurity/trivy-action` is pinned by commit SHA (and the Trivy binary by version) because its mutable tags were hijacked in March 2026; gitleaks is installed from a pinned release with checksum verification.
+

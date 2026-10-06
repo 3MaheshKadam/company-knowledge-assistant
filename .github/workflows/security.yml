@@ -29,7 +29,17 @@ jobs:
       - name: Bandit (static analysis, medium+ severity)
         run: bandit -q -r src -ll
       - name: pip-audit (known vulnerabilities in dependencies)
-        run: pip-audit
+        # Four ChromaDB advisories have NO fixed release yet. All concern Chroma's HTTP *server*
+        # (/api/v2 endpoints, SimpleRBACAuthorizationProvider). This project only uses the embedded
+        # PersistentClient and never starts or exposes a Chroma server, so they are not reachable.
+        # Each ID is ignored explicitly (not a blanket skip); see SECURITY.md "Accepted risks".
+        # Remove these flags as soon as chromadb ships a fix.
+        run: |
+          pip-audit --skip-editable \
+            --ignore-vuln PYSEC-2026-311 \
+            --ignore-vuln PYSEC-2026-3813 \
+            --ignore-vuln PYSEC-2026-3814 \
+            --ignore-vuln PYSEC-2026-3815
 
   codeql:
     name: CodeQL
@@ -39,10 +49,10 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
+      - uses: github/codeql-action/init@v4
         with:
           languages: python
-      - uses: github/codeql-action/analyze@v3
+      - uses: github/codeql-action/analyze@v4
 
   secrets:
     name: Secret scan (gitleaks)
@@ -51,10 +61,22 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Run the binary directly over the full history. (The gitleaks-action computes a commit range
+      # like <first-commit>^..HEAD, which fails on a repo's very first push because the root commit
+      # has no parent.) Pinned version + checksum verification.
+      - name: Install gitleaks (pinned, checksum-verified)
+        run: |
+          V=8.21.2
+          F="gitleaks_${V}_linux_x64.tar.gz"
+          curl -sSfL -O "https://github.com/gitleaks/gitleaks/releases/download/v${V}/${F}"
+          curl -sSfL -o checksums.txt "https://github.com/gitleaks/gitleaks/releases/download/v${V}/gitleaks_${V}_checksums.txt"
+          grep " ${F}\$" checksums.txt | sha256sum -c -
+          tar -xzf "${F}" gitleaks
+      - name: Scan full git history
+        run: ./gitleaks detect --source . --redact --no-banner -v
 
+  # Requires the repository's Dependency graph to be enabled:
+  # Settings -> Advanced Security -> Dependency graph (free for public repos).
   dependency-review:
     name: Dependency review (PRs)
     if: github.event_name == 'pull_request'
@@ -76,8 +98,13 @@ jobs:
           context: .
           load: true
           tags: company-knowledge-assistant:scan
-      - uses: aquasecurity/trivy-action@0.28.0
+      # Pinned to a full commit SHA (v0.35.0). In March 2026 attackers force-pushed 76 of 77 tags of
+      # this action to malicious commits; only v0.35.0 was unaffected (per Aqua's advisory), and tags
+      # are mutable, so we pin the immutable SHA. The scanner binary is pinned too (v0.69.4 was
+      # malicious). Update both deliberately, not automatically.
+      - uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
+          version: v0.69.3
           image-ref: company-knowledge-assistant:scan
           severity: CRITICAL,HIGH
           ignore-unfixed: true

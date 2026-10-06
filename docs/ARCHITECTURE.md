@@ -55,7 +55,7 @@ Ingest and retrieval share one `RLock` around the vector store and BM25 index; B
 | Limit | Fix |
 |---|---|
 | Cache, rate limiter and job state are per process | Redis for cache + rate limits; Celery/RQ + Redis for jobs. The interfaces (`get/set/clear`, `submit/get/list`) are already minimal |
-| Embedded Chroma on a local volume (one writer) | Run Chroma as a server, or move to a managed vector DB (pgvector, OpenSearch) |
+| Embedded Chroma on a local volume (one writer) | Move to a managed vector DB (pgvector, OpenSearch). Running Chroma as a *server* is currently discouraged: it is affected by unfixed advisories (see SECURITY.md, Accepted risks) |
 | BM25 is rebuilt in memory on every change and loaded entirely in RAM | Fine for thousands of chunks. For millions, use OpenSearch/Elasticsearch for the sparse side |
 | Offset pagination degrades on huge lists | Switch to keyset/cursor pagination |
 | No document-level permissions | Add tenant/ACL metadata on chunks and filter at retrieval |
