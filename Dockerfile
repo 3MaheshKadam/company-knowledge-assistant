@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
 # ---- builder: resolve and build wheels (build tools never reach the final image) ------------
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 WORKDIR /build
 COPY pyproject.toml README.md ./
@@ -9,7 +9,7 @@ COPY src ./src
 RUN pip wheel --wheel-dir /wheels .
 
 # ---- runtime: minimal, non-root, read-only-friendly -----------------------------------------
-FROM python:3.12-slim AS runtime
+FROM python:3.14-slim AS runtime
 ARG VERSION=0.1.0
 ARG VCS_REF=unknown
 LABEL org.opencontainers.image.title="company-knowledge-assistant" \
